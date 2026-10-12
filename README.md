@@ -5,6 +5,9 @@ A basic Spring Boot calculator REST API (add, subtract, multiply, divide).
 ## Run
     mvn spring-boot:run
 
+## Web UI
+After starting the app, open http://localhost:8080 and enter two numbers, choose an operation, and click Calculate.
+
 ## Endpoints
     GET /api/calculator/add?a=2&b=3
     GET /api/calculator/subtract?a=10&b=4

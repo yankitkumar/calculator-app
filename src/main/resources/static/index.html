@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculator</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f3f4f6; display: flex; justify-content: center; padding: 48px 16px; }
+    .card { background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.1); width: 100%; max-width: 360px; }
+    h1 { margin-top: 0; font-size: 1.4rem; }
+    input, select, button { width: 100%; box-sizing: border-box; padding: 10px; margin-top: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 8px; }
+    button { background: #2563eb; color: #fff; border: 0; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+    #result { margin-top: 16px; font-size: 1.2rem; min-height: 1.5em; }
+    #result.error { color: #dc2626; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Calculator</h1>
+    <form id="form">
+      <input id="a" type="number" step="any" placeholder="First number" required>
+      <select id="op">
+        <option value="add">+ Add</option>
+        <option value="subtract">− Subtract</option>
+        <option value="multiply">× Multiply</option>
+        <option value="divide">÷ Divide</option>
+      </select>
+      <input id="b" type="number" step="any" placeholder="Second number" required>
+      <button type="submit">Calculate</button>
+    </form>
+    <div id="result"></div>
+  </div>
+  <script>
+    document.getElementById('form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const a = document.getElementById('a').value;
+      const b = document.getElementById('b').value;
+      const op = document.getElementById('op').value;
+      const out = document.getElementById('result');
+      try {
+        const res = await fetch(`/api/calculator/${op}?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}`);
+        const data = await res.json();
+        out.className = res.ok ? '' : 'error';
+        out.textContent = res.ok ? `Result: ${data.result}` : `Error: ${data.error || 'Invalid input'}`;
+      } catch (err) {
+        out.className = 'error';
+        out.textContent = 'Error: could not reach the server';
+      }
+    });
+  </script>
+</body>
+</html>
